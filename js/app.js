@@ -20,8 +20,8 @@ var deck = $(".deck");
 addCardsToDeck(cards, deck);
 
 
- // Function to construct card elements and insert into Deck
- function addCardsToDeck(cards, deck){
+// Function to construct card elements and insert into Deck
+function addCardsToDeck(cards, deck){
     var elements = [];
     for (var card of cards) {
         var element = $("<li class='card' </li>");
@@ -29,7 +29,7 @@ addCardsToDeck(cards, deck);
         elements.push(element);
     }
     deck.append(elements);
- }
+}
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -42,7 +42,6 @@ function shuffle(array) {
         array[currentIndex] = array[randomIndex];
         array[randomIndex] = temporaryValue;
     }
-
     return array;
 }
 
@@ -57,3 +56,62 @@ function shuffle(array) {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
+
+var selectedCard = null;
+var selectedElement = null;
+
+var matchPairCounter = 0;
+
+var movesCounter = 0;
+
+// event listener for card click
+$('.card').click(function(){
+
+    //Fix double selected card problem!!!
+    // TO DO
+
+    var currentElement = $(this);
+    var iconElement = this.children;
+    var currentCard = iconElement[0].className.split(' ')[1];
+    
+    $(this).addClass("open show");
+
+    if (selectedCard === null){
+        selectedElement = $(this);
+        selectedCard = currentCard;
+    }
+    else {
+        if (currentCard === selectedCard){
+            currentElement.removeClass("open show");
+            currentElement.addClass("match");
+            selectedElement.removeClass("open show");
+            selectedElement.addClass("match");
+            resetMove();
+            matchPairCounter++;
+            checkStatus();
+        }
+        else {
+            selectedElement.addClass("wrong");
+            currentElement.addClass("wrong");
+            setTimeout(function(){
+                selectedElement.removeClass("open show wrong");
+                currentElement.removeClass("open show wrong");
+                resetMove();
+            }, 700);
+        }
+        movesCounter++;
+        $('.moves').text(movesCounter);
+    }
+});
+
+// reset the move 
+function resetMove() {
+    this.selectedCard = null;
+    this.selectedElement = null;
+}
+
+function checkStatus() {
+    if (matchPairCounter == 8) {
+        console.log("End of the Game");
+    }
+}
