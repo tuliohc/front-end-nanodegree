@@ -2,6 +2,7 @@
  * Create a list that holds all of your cards
  */
 
+var cards = ["fa-diamond", "fa-paper-plane-o", "fa-anchor", "fa-bolt", "fa-cube", "fa-leaf", "fa-bicycle", "fa-bomb", "fa-diamond", "fa-paper-plane-o", "fa-anchor", "fa-bolt", "fa-cube", "fa-leaf", "fa-bicycle", "fa-bomb"];
 
 /*
  * Display the cards on the page
@@ -9,6 +10,26 @@
  *   - loop through each card and create its HTML
  *   - add each card's HTML to the page
  */
+
+// shuffle cards
+cards = shuffle(cards);
+
+var deck = $(".deck");
+
+// add card elements to DOM
+addCarsToDeck(cards, deck);
+
+
+ // Function to construct card elements and insert into Deck
+ function addCarsToDeck(cards, deck){
+    var elements = [];
+    for (var card of cards) {
+        var element = $("<li class='card' </li>");
+        element.append(`<i class='fa ${card}'></i>`);
+        elements.push(element);
+    }
+    deck.append(elements);
+ }
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
