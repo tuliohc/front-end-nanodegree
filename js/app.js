@@ -17,11 +17,11 @@ cards = shuffle(cards);
 var deck = $(".deck");
 
 // add card elements to DOM
-addCarsToDeck(cards, deck);
+addCardsToDeck(cards, deck);
 
 
  // Function to construct card elements and insert into Deck
- function addCarsToDeck(cards, deck){
+ function addCardsToDeck(cards, deck){
     var elements = [];
     for (var card of cards) {
         var element = $("<li class='card' </li>");
