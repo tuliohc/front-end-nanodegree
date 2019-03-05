@@ -15,14 +15,11 @@
         <header>
             <h1>Matching Game</h1>
         </header>
-
         <section class="score-panel">
 
             <div class="timer">
                 <span id="timer">0</span>
-            </div>
-
-                    
+            </div>       
         	<ul class="stars">
         		<li><i class="fa fa-star" id="firstStar"></i></li>
         		<li><i class="fa fa-star" id="secondStar"></i></li>
@@ -34,35 +31,30 @@
             <div class="restart">
         		<i class="fa fa-repeat"></i>
             </div>
-            
-   
         </section>
-
         <ul class="deck">
         </ul>
     </div>
 
     <!-- Modal -->
     <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
-    
-        <!-- Modal content-->
-        <div class="modal-content">
-        <div class="modal-header">
-            <h4 class="modal-title">Congratulations!</h4>
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-        <div class="modal-body">
-            <p id="totalscore">Message</p>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal" onClick="gameReset()">Play again</button>
-        </div>
-        </div>
+        <div class="modal-dialog">
         
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Congratulations!</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p id="totalscore">Message</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" onClick="gameReset()">Play again</button>
+                </div>
+            </div>  
+        </div>
     </div>
-    </div>
-  
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/timer.jquery/0.7.0/timer.jquery.js"></script>
