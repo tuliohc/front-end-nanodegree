@@ -1,20 +1,17 @@
-/*
- * Create a list that holds all of your cards
- */
-
 var cards = ["fa-diamond", "fa-paper-plane-o", "fa-anchor", "fa-bolt", "fa-cube", "fa-leaf", "fa-bicycle", "fa-bomb", "fa-diamond", "fa-paper-plane-o", "fa-anchor", "fa-bolt", "fa-cube", "fa-leaf", "fa-bicycle", "fa-bomb"];
-
-/*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
- */
+var selectedCard = null;
+var selectedElement = null;
+var selectedCardId = null;
+var matchPairCounter = 0;
+var movesCounter = 0;
+var starsCounter = 3;
+var deck = $(".deck");
+// jquery timer: https://github.com/walmik/timer.jquery
+var timer; 
 
 // shuffle cards
 cards = shuffle(cards);
 
-var deck = $(".deck");
 
 // add card elements to DOM
 addCardsToDeck(cards, deck);
@@ -23,10 +20,12 @@ addCardsToDeck(cards, deck);
 // Function to construct card elements and insert into Deck
 function addCardsToDeck(cards, deck){
     var elements = [];
+    var id = 1;
     for (var card of cards) {
-        var element = $("<li class='card' </li>");
+        var element = $(`<li class='card' id='card${id}'</li>`);
         element.append(`<i class='fa ${card}'></i>`);
         elements.push(element);
+        id++;
     }
     deck.append(elements);
 }
@@ -34,7 +33,6 @@ function addCardsToDeck(cards, deck){
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
-
     while (currentIndex !== 0) {
         randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex -= 1;
@@ -45,43 +43,28 @@ function shuffle(array) {
     return array;
 }
 
-
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
-
-var selectedCard = null;
-var selectedElement = null;
-
-var matchPairCounter = 0;
-
-var movesCounter = 0;
-
 // event listener for card click
 $('.card').click(function(){
 
-    //Fix double selected card problem!!!
-    // TO DO
+    startCounter();
 
     var currentElement = $(this);
+
     var iconElement = this.children;
     var currentCard = iconElement[0].className.split(' ')[1];
-    
-    $(this).addClass("open show");
+    var currentCardId = currentElement.attr('id');
+
+    showCard(currentElement);
 
     if (selectedCard === null){
-        selectedElement = $(this);
+        selectedElement = currentElement;
         selectedCard = currentCard;
+        selectedCardId = currentCardId;
     }
     else {
-        if (currentCard === selectedCard){
+        movesCounter++;
+        updateScore();
+        if (!doubleSelect(currentElement) && currentCard === selectedCard){
             currentElement.removeClass("open show");
             currentElement.addClass("match");
             selectedElement.removeClass("open show");
@@ -99,10 +82,13 @@ $('.card').click(function(){
                 resetMove();
             }, 700);
         }
-        movesCounter++;
-        $('.moves').text(movesCounter);
     }
 });
+
+// event listener for restart button
+$('.restart').click(function(){
+    gameReset();
+})
 
 // reset the move 
 function resetMove() {
@@ -110,8 +96,49 @@ function resetMove() {
     this.selectedElement = null;
 }
 
+// check the game status... if there is 8 matched pairs, the game is over
 function checkStatus() {
     if (matchPairCounter == 8) {
-        console.log("End of the Game");
+        timer.timer('pause');
+        $('#totalscore').text(`You finished the game in ${timer.data('seconds')} seconds with ${movesCounter} moves and ${starsCounter} star(s)`);
+        $('#myModal').modal('show');
     }
 }
+
+// add class that reveal the card
+function showCard(element) {
+    element.addClass("open show");
+}
+
+// updates the move and star numbers at score panel
+function updateScore() {
+    $('.moves').text(movesCounter);
+    if (movesCounter > 10 && movesCounter <= 15 ){
+        $('#thirdStar').removeClass('fa fa-star');
+        $('#thirdStar').addClass('fa fa-star-o');
+        starsCounter = 2;
+    }
+    else if (movesCounter > 15) {
+        $('#secondStar').removeClass('fa fa-star');
+        $('#secondStar').addClass('fa fa-star-o');
+        starsCounter = 1;
+    }
+    // you should have at least 1 star
+}
+
+// check if the card is selected twice
+function doubleSelect(element) {
+    return element.attr('id') === selectedCardId ? true : false;
+}
+
+// reset the game reloading the window
+function gameReset() {
+    location.reload();
+}
+
+// starts the game counter
+function startCounter() {
+    timer = $('#timer').timer();
+}
+
+

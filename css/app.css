@@ -101,6 +101,8 @@ h1 {
     font-size: 33px;
 }
 
+
+/* Animations generated using http://cssanimate.com */
 .deck .card.match {
     cursor: default;
     background: #02ccba;
@@ -303,7 +305,6 @@ h1 {
   }
 
 
-
 /*
  * Styles for the Score Panel
  */
@@ -318,7 +319,7 @@ h1 {
     margin: 0;
     padding: 0;
     display: inline-block;
-    margin: 0 5px 0 0;
+    margin: 0 5px 0 50px;
 }
 
 .score-panel .stars li {
@@ -328,5 +329,10 @@ h1 {
 
 .score-panel .restart {
     float: right;
+    cursor: pointer;
+}
+
+.score-panel .timer {
+    float: left;
     cursor: pointer;
 }
