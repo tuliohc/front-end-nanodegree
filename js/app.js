@@ -18,7 +18,7 @@ addCardsToDeck(cards, deck);
 
 
 // Function to construct card elements and insert into Deck
-function addCardsToDeck(cards, deck){
+function addCardsToDeck(cards, deck) {
     var elements = [];
     var id = 1;
     for (var card of cards) {
@@ -44,27 +44,31 @@ function shuffle(array) {
 }
 
 // event listener for card click
-$('.card').click(function(){
+var cardClick = function() {
 
     startCounter();
 
     var currentElement = $(this);
+    currentElement.off();
 
     var iconElement = this.children;
     var currentCard = iconElement[0].className.split(' ')[1];
     var currentCardId = currentElement.attr('id');
 
+
     showCard(currentElement);
 
-    if (selectedCard === null){
+    // check if it's the first card
+    if (selectedCard === null) {
         selectedElement = currentElement;
         selectedCard = currentCard;
         selectedCardId = currentCardId;
     }
+    // it's the second card
     else {
         movesCounter++;
         updateScore();
-        if (!doubleSelect(currentElement) && currentCard === selectedCard){
+        if (currentCard === selectedCard) {       
             currentElement.removeClass("open show");
             currentElement.addClass("match");
             selectedElement.removeClass("open show");
@@ -74,26 +78,32 @@ $('.card').click(function(){
             checkStatus();
         }
         else {
+            $('.card').off();
             selectedElement.addClass("wrong");
             currentElement.addClass("wrong");
+            
             setTimeout(function(){
                 selectedElement.removeClass("open show wrong");
                 currentElement.removeClass("open show wrong");
                 resetMove();
+                $('.card').click(cardClick);
             }, 700);
         }
     }
-});
+  
+}
+
+$('.card').click(cardClick);
 
 // event listener for restart button
-$('.restart').click(function(){
+$('.restart').click(function() {
     gameReset();
 })
 
 // reset the move 
 function resetMove() {
-    this.selectedCard = null;
-    this.selectedElement = null;
+    selectedCard = null;
+    selectedElement = null;
 }
 
 // check the game status... if there is 8 matched pairs, the game is over
@@ -101,7 +111,8 @@ function checkStatus() {
     if (matchPairCounter == 8) {
         timer.timer('pause');
         $('#totalscore').text(`You finished the game in ${timer.data('seconds')} seconds with ${movesCounter} moves and ${starsCounter} star(s)`);
-        $('#myModal').modal('show');
+        $('#myModal').modal({backdrop: 'static', keyboard: false});
+        
     }
 }
 
@@ -113,7 +124,7 @@ function showCard(element) {
 // updates the move and star numbers at score panel
 function updateScore() {
     $('.moves').text(movesCounter);
-    if (movesCounter > 10 && movesCounter <= 15 ){
+    if (movesCounter > 10 && movesCounter <= 15 ) {
         $('#thirdStar').removeClass('fa fa-star');
         $('#thirdStar').addClass('fa fa-star-o');
         starsCounter = 2;
